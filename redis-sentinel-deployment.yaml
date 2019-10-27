@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-sentinel
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      redis-sentinel: "true"
+  template:
+    metadata:
+      labels:
+        name: redis-sentinel
+        redis-sentinel: "true"
+        role: sentinel
+    spec:
+      containers:
+        - name: sentinel
+          image: redis-fa:v1.0.0
+          env:
+            - name: SENTINEL
+              value: "true"
+            - name: DOWN_AFTER_MS
+              value: "8000"
+          ports:
+            - containerPort: 26379
